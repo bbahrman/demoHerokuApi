@@ -6,5 +6,10 @@ app.get('/', (req, res)=> {
     res.send('Hello world!');
 });
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.post('/', (req, res)=> {
+    console.log('Req = ' + req);
+    res.send('Hello world!');
+});
+
+app.listen(process.env.PORT | 3000, () => console.log('Example app listening on port ' + process.env.PORT + '!'));
 
