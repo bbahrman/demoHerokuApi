@@ -2,14 +2,10 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res)=> {
-    console.log('Req = ' + req);
+    console.log('Get Req = ' + req);
     res.send('Hello world!');
-});
-
-app.post('/', (req, res)=> {
-    console.log('Req = ' + req);
+}).post('/', (req, res)=> {
+    console.log('Post Req = ' + req);
     res.send('Hello world!');
-});
-
-app.listen(process.env.PORT | 3000, () => console.log('Example app listening on port ' + process.env.PORT + '!'));
+}).listen(process.env.PORT | 3000, () => console.log('Example app listening on port ' + process.env.PORT + '!'));
 
