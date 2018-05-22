@@ -9,12 +9,10 @@ app
 
 function onGet (req, res) {
     console.log(req);
-    console.log(JSON.stringify(req));
     res.send('Hello world - GET')
 }
 
 function onPost(req, res) {
     console.log(req);
-    console.log(JSON.stringify(req));
     res.send('Hello World - POST');
 }
