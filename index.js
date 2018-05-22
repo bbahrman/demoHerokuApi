@@ -10,7 +10,6 @@ app
     .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 function onGet (req, res) {
-    console.log(req.body);
     res.send('Hello world - GET')
 }
 
