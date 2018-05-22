@@ -8,9 +8,13 @@ app
     .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 function onGet (req, res) {
+    console.log(req);
+    console.log(JSON.stringify(req));
     res.send('Hello world - GET')
 }
 
 function onPost(req, res) {
-   res.send('Hello World - POST');
+    console.log(req);
+    console.log(JSON.stringify(req));
+    res.send('Hello World - POST');
 }
