@@ -10,7 +10,9 @@ app
     .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 function onGet (req, res) {
-    res.send('Hello world - GET')
+    res.send('Hello world - GET');
+    res.setHeader('Content-Type', 'application/json');
+    res.send({'message': 'success'});
 }
 
 function onPost(req, res) {
