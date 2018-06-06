@@ -11,6 +11,7 @@ app
     next();
   })
   .get('/', onGet)
+  .get('/test', onGet)
   .post('/', onPost)
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
