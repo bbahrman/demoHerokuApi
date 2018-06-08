@@ -79,7 +79,6 @@ function summarizeTimePerJob (responseBody, mapping) {
     }
 
     // add to parent duration to parent
-    console.log('Adding ' + duration + ' to ' + timePerJob.summary[parent]);
     timePerJob.summary[parent] = timePerJob.summary[parent] ? timePerJob.summary[parent] + duration : duration;
     // fill details in
     if(!timePerJob['detail'][linkName]) {
@@ -91,7 +90,7 @@ function summarizeTimePerJob (responseBody, mapping) {
     timePerJob.detail[linkName]['time'] = timePerJob.detail[linkName]['time'] + duration;
     timePerJob.detail[linkName]['notes'] = timePerJob.detail[linkName]['notes'] + notes;
   });
-
+  console.log(timePerJob);
   return timePerJob;
 }
 
