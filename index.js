@@ -17,8 +17,9 @@ app
 
 function onGet (req, res) {
   console.log('Entering onGet');
+  const today = new Date().toISOString().split('T');
   const options = {
-    url: 'https://rest.tsheets.com/api/v1/timesheets?start_date=2018-06-07',
+    url: 'https://rest.tsheets.com/api/v1/timesheets?start_date=' + today[0],
     headers: {
       'Authorization': 'Bearer S.4__ae3083c841d0d9c1850c5186cc64aba675671ae2'
     }
