@@ -32,9 +32,11 @@ function onGet (req, res) {
     console.log('Response returned from remote, processing response object');
     const bodyData = JSON.parse(body);
     const timePerJob = {};
-    Object.keys(bodyData).forEach((entryId) => {
-      console.log('entryId = ' + entryId + ' jobcode = ' + bodyData[entryId]['jobcode_id']);
-      timePerJob[bodyData[entryId]['jobcode_id']] += bodyData[entryId]['duration'];
+    const timesheetData = bodyData['results']['timesheets'];
+
+    Object.keys(timesheetData).forEach((entryId) => {
+      console.log('entryId = ' + entryId + ' jobcode = ' + timesheetData[entryId]['jobcode_id']);
+      timePerJob[timesheetData[entryId]['jobcode_id']] += timesheetData[entryId]['duration'];
     });
     res.send(timePerJob);
   });
