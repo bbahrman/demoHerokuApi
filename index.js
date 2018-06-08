@@ -16,17 +16,23 @@ app
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 function onGet (req, res) {
-  var options = {
+  console.log('Entering onGet');
+  const options = {
     url: 'https://rest.tsheets.com/api/v1/timesheets?start_date=2018-06-07',
     headers: {
       'Authorization': 'Bearer S.4__ae3083c841d0d9c1850c5186cc64aba675671ae2'
     }
   };
-    res.header('Content-Type', 'application/json');
-    const request = require('request');
-    request(options, function (error, response, body) {
-        res.send(body);
-    });
+  console.log('Setting header');
+  res.header('Content-Type', 'application/json');
+  console.log('Define request');
+  const request = require('request');
+  console.log('Calling request');
+  request(options, function (error, response, body) {
+    console.log('Response returned from remote, returning response object')
+    res.send(body);
+  });
+  console.log('End onGet');
 }
 
 function onPost(req, res) {
