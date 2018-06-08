@@ -30,40 +30,7 @@ function onGet (req, res) {
   console.log('Calling request');
   request(options, function (error, response, body) {
     console.log('Response returned from remote, processing response object');
-    const bodyData = JSON.parse(body);
-    const timePerJob = {};
-    const timesheetData = bodyData['results']['timesheets'];
-    const jobCodeData = bodyData['supplemental_data']['jobcodes'];
-    const jobCodeDictionary = {};
-
-    Object.keys(timesheetData).forEach((entryId) => {
-      console.log(timesheetData[entryId]['duration']);
-      timePerJob[timesheetData[entryId]['jobcode_id']] = timePerJob[timesheetData[entryId]['jobcode_id']] ? timePerJob[timesheetData[entryId]['jobcode_id']] + parseInt(timesheetData[entryId]['duration']) : parseInt(timesheetData[entryId]['duration']);
-    });
-
-    const parentIdToName = {};
-    Object.keys(jobCodeData).forEach(jobId => {
-      if(jobCodeData[jobId]['has_children']) {
-        parentIdToName[jobId] = jobCodeData[jobId]['name'];
-      }
-    });
-
-    Object.keys(jobCodeData).forEach(jobId => {
-      if(!jobCodeData[jobId]['has_children'] && jobCodeData[jobId]['parent_id'] !== 0) {
-        jobCodeDictionary[jobId] = parentIdToName[jobCodeData[jobId]['parent_id']];
-      } else {
-        jobCodeDictionary[jobId] = jobCodeData[jobId]['name'];
-      }
-    });
-    const finalData = {};
-    Object.keys(timePerJob).forEach(jobId => {
-      finalData[jobCodeDictionary[jobId]] = finalData[jobCodeDictionary[jobId]] ? finalData[jobCodeDictionary[jobId]] + timePerJob[jobId] : timePerJob[jobId];
-    });
-
-    Object.keys(finalData).forEach(jobId => {
-      finalData[jobId] = Math.round((finalData[jobId] / (60*60)) * 100) / 100;
-    });
-
+    const finalData = processData(body);
     res.send(finalData);
   });
   console.log('End onGet');
@@ -74,6 +41,40 @@ function onPost(req, res) {
     res.send('Hello World - POST');
 }
 
-async function returnData () {
+function processData (responseBody) {
+  const bodyData = JSON.parse(responseBody);
+  const timePerJob = {};
+  const timesheetData = bodyData['results']['timesheets'];
+  const jobCodeData = bodyData['supplemental_data']['jobcodes'];
+  const jobCodeDictionary = {};
 
+  Object.keys(timesheetData).forEach((entryId) => {
+    console.log(timesheetData[entryId]['duration']);
+    timePerJob[timesheetData[entryId]['jobcode_id']] = timePerJob[timesheetData[entryId]['jobcode_id']] ? timePerJob[timesheetData[entryId]['jobcode_id']] + parseInt(timesheetData[entryId]['duration']) : parseInt(timesheetData[entryId]['duration']);
+  });
+
+  const parentIdToName = {};
+  Object.keys(jobCodeData).forEach(jobId => {
+    if(jobCodeData[jobId]['has_children']) {
+      parentIdToName[jobId] = jobCodeData[jobId]['name'];
+    }
+  });
+
+  Object.keys(jobCodeData).forEach(jobId => {
+    if(!jobCodeData[jobId]['has_children'] && jobCodeData[jobId]['parent_id'] !== 0) {
+      jobCodeDictionary[jobId] = parentIdToName[jobCodeData[jobId]['parent_id']];
+    } else {
+      jobCodeDictionary[jobId] = jobCodeData[jobId]['name'];
+    }
+  });
+  const finalData = {};
+  Object.keys(timePerJob).forEach(jobId => {
+    finalData[jobCodeDictionary[jobId]] = finalData[jobCodeDictionary[jobId]] ? finalData[jobCodeDictionary[jobId]] + timePerJob[jobId] : timePerJob[jobId];
+  });
+
+  Object.keys(finalData).forEach(jobId => {
+    finalData[jobId] = Math.round((finalData[jobId] / (60*60)) * 100) / 100;
+  });
+
+  return finalData;
 }
