@@ -57,7 +57,7 @@ function onGet (req, res) {
     });
     const finalData = {};
     Object.keys(timePerJob).forEach(jobId => {
-      finalData[jobCodeDictionary[jobId]] = timePerJob[jobId] / (60 * 60);
+      finalData[jobCodeDictionary[jobId]] = finalData[jobCodeDictionary[jobId]] ? finalData[jobCodeDictionary[jobId]] + timePerJob[jobId] / 60 : timePerJob[jobId] / 60;
     });
 
     res.send(finalData);
