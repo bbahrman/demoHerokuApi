@@ -37,7 +37,7 @@ function onGet (req, res) {
     const timePerJob = summarizeTimePerJob(body, jobDictionary);
 
     Object.keys(timePerJob['summary']).forEach(jobId => {
-      timePerJob['summary'][jobId] = Math.round((timePerJob['summary'] / (60*60)) * 100) / 100;
+      timePerJob['summary'][jobId] = Math.round((timePerJob['summary'][jobId] / (60*60)) * 100) / 100;
     });
 
     Object.keys(timePerJob['detail']).forEach(jobId => {
