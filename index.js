@@ -44,7 +44,6 @@ function onGet (req, res) {
       timePerJob['detail'][jobId]['time'] = Math.round((timePerJob['detail'][jobId]['time'] / (60*60)) * 100) / 100;
     });
 
-
     res.send(timePerJob);
   });
   console.log('End onGet');
@@ -66,7 +65,7 @@ function summarizeTimePerJob (responseBody, mapping) {
 
   Object.keys(timesheetData).forEach((entryId) => {
     let duration;
-    const entryObject = timesheetData[entryId]
+    const entryObject = timesheetData[entryId];
     let notes = entryObject['notes'] ? ' ' + entryObject['notes'] : entryObject['notes'];
     const jobId = entryObject['jobcode_id'];
     const parent = mapping['idToParentName'][jobId];
@@ -80,6 +79,7 @@ function summarizeTimePerJob (responseBody, mapping) {
     }
 
     // add to parent duration to parent
+    console.log('Adding ' + duration + ' to ' + timePerJob.summary[parent]);
     timePerJob.summary[parent] = timePerJob.summary[parent] ? timePerJob.summary[parent] + duration : duration;
     // fill details in
     if(!timePerJob['detail'][linkName]) {
@@ -107,7 +107,7 @@ function makeDictionary (responseBody) {
     if(jobCodeData[jobId]['has_children']) {
       parentIdToName[jobId] = jobCodeData[jobId]['name'];
     }
-    const nameSplit = jobCodeData[jobId]['name'].split('-');
+    const nameSplit = jobCodeData[jobId]['name'].split('|');
     jobIdToLink[jobId] = nameSplit[nameSplit.length -1].trim();
   });
 
@@ -118,6 +118,8 @@ function makeDictionary (responseBody) {
       jobCodeDictionary[jobId] = jobCodeData[jobId]['name'];
     }
   });
+
+  console.log(jobCodeDictionary);
   return {
     idToParentName: jobCodeDictionary,
     idToLink: jobIdToLink
