@@ -19,9 +19,17 @@ function onGet (req, res) {
     res.send([{'test':'val'}]);
     res.header('Content-Type', 'application/json');
     res.send({'message': 'success'});
+    const request = require('request');
+    request('https://rest.tsheets.com/api/v1/timesheets?start_date=2018-06-07', function (error, response, body) {
+        res.send(body);
+    });
 }
 
 function onPost(req, res) {
     console.log(req.body);
     res.send('Hello World - POST');
+}
+
+async function returnData () {
+
 }
