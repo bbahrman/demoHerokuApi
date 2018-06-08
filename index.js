@@ -36,10 +36,14 @@ function onGet (req, res) {
 
     Object.keys(timesheetData).forEach((entryId) => {
       console.log(timesheetData[entryId]['duration']);
-
       timePerJob[timesheetData[entryId]['jobcode_id']] = timePerJob[timesheetData[entryId]['jobcode_id']] ? timePerJob[timesheetData[entryId]['jobcode_id']] + parseInt(timesheetData[entryId]['duration']) : parseInt(timesheetData[entryId]['duration']);
     });
-    res.send(timePerJob);
+
+    Object.keys(timesheetData).forEach((entryId) => {
+      console.log(timesheetData[entryId]['duration']);
+      timePerJob[timesheetData[entryId]['jobcode_id']] = timePerJob[timesheetData[entryId]['jobcode_id']] ? timePerJob[timesheetData[entryId]['jobcode_id']] + parseInt(timesheetData[entryId]['duration']) : parseInt(timesheetData[entryId]['duration']);
+    });
+    res.send(bodyData);
   });
   console.log('End onGet');
 }
