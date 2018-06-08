@@ -48,10 +48,18 @@ function processData (responseBody) {
   const timesheetData = bodyData['results']['timesheets'];
   const jobCodeData = bodyData['supplemental_data']['jobcodes'];
   const jobCodeDictionary = {};
+  const now = new Date();
 
   Object.keys(timesheetData).forEach((entryId) => {
     console.log(timesheetData[entryId]['duration']);
-    timePerJob[timesheetData[entryId]['jobcode_id']] = timePerJob[timesheetData[entryId]['jobcode_id']] ? timePerJob[timesheetData[entryId]['jobcode_id']] + parseInt(timesheetData[entryId]['duration']) : parseInt(timesheetData[entryId]['duration']);
+    let duration;
+    if(timesheetData[entryId]['on_the_clock']) {
+      duration = now - Date.parse(timesheetData[entryId]['start']) / 1000;
+      console.log('Duration calculation, seconds = ' + duration)
+    } else {
+      duration = parseInt(timesheetData[entryId]['duration']);
+    }
+    timePerJob[timesheetData[entryId]['jobcode_id']] = timePerJob[timesheetData[entryId]['jobcode_id']] ? timePerJob[timesheetData[entryId]['jobcode_id']] + duration : duration;
   });
 
   const parentIdToName = {};
