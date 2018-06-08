@@ -82,8 +82,8 @@ function summarizeTimePerJob (responseBody, mapping) {
     // add to parent duration to parent
     timePerJob.summary[parent] = timePerJob.summary[parent] ? timePerJob.summary[parent] + duration : duration;
     // fill details in
-    if(!timePerJob['detail'][jobId]) {
-      timePerJob['detail'][jobId] = {
+    if(!timePerJob['detail'][linkName]) {
+      timePerJob['detail'][linkName] = {
         'time': 0,
         'notes': ''
       }
