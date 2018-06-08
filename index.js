@@ -54,8 +54,8 @@ function processData (responseBody) {
     console.log(timesheetData[entryId]['duration']);
     let duration;
     if(timesheetData[entryId]['on_the_clock']) {
-      duration = now - Date.parse(timesheetData[entryId]['start']) / 1000;
-      console.log('Duration calculation, seconds = ' + duration)
+      duration = (now - Date.parse(timesheetData[entryId]['start'])) / 1000;
+      console.log('Duration calculation, seconds = ' + duration);
     } else {
       duration = parseInt(timesheetData[entryId]['duration']);
     }
