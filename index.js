@@ -33,6 +33,7 @@ function onGet (req, res) {
     const bodyData = JSON.parse(body);
     const timePerJob = {};
     Object.keys(bodyData).forEach((entryId) => {
+      console.log('entryId = ' + entryId + ' jobcode = ' + bodyData[entryId]['jobcode_id']);
       timePerJob[bodyData[entryId]['jobcode_id']] += bodyData[entryId]['duration'];
     });
     res.send(timePerJob);
