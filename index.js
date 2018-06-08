@@ -30,7 +30,8 @@ function onGet (req, res) {
   console.log('Calling request');
   request(options, function (error, response, body) {
     console.log('Response returned from remote, processing response object');
-    res.send(body['results']['timesheets']);
+    const bodyData = JSON.parse(body);
+    res.send(bodyData['results']['timesheets']);
   });
   console.log('End onGet');
 }
