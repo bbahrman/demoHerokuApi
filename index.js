@@ -16,9 +16,15 @@ app
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 function onGet (req, res) {
+  var options = {
+    url: 'https://rest.tsheets.com/api/v1/timesheets?start_date=2018-06-07',
+    headers: {
+      'Authorization': 'Bearer S.4__ae3083c841d0d9c1850c5186cc64aba675671ae2'
+    }
+  };
     res.header('Content-Type', 'application/json');
     const request = require('request');
-    request('https://rest.tsheets.com/api/v1/timesheets?start_date=2018-06-07', function (error, response, body) {
+    request(options, function (error, response, body) {
         res.send(body);
     });
 }
