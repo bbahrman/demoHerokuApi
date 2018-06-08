@@ -67,7 +67,7 @@ function summarizeTimePerJob (responseBody, mapping) {
   Object.keys(timesheetData).forEach((entryId) => {
     let duration;
     const entryObject = timesheetData[entryId]
-    const notes = entryObject['notes'];
+    let notes = entryObject['notes'] ? ' ' + entryObject['notes'] : entryObject['notes'];
     const jobId = entryObject['jobcode_id'];
     const parent = mapping['idToParentName'][jobId];
     const linkName = mapping['idToLink'][jobId];
@@ -82,8 +82,14 @@ function summarizeTimePerJob (responseBody, mapping) {
     // add to parent duration to parent
     timePerJob.summary[parent] = timePerJob.summary[parent] ? timePerJob.summary[parent] + duration : duration;
     // fill details in
-    timePerJob.detail[linkName]['time'] = timePerJob.detail[linkName]['time'] ? timePerJob.detail[linkName]['time'] + duration : duration;
-    timePerJob.detail[linkName]['notes'] = timePerJob.detail[linkName]['notes'] ? timePerJob.detail[linkName]['notes'] + ' ' + notes : notes;
+    if(!timePerJob['detail'][jobId]) {
+      timePerJob['detail'][jobId] = {
+        'time': 0,
+        'notes': ''
+      }
+    }
+    timePerJob.detail[linkName]['time'] = timePerJob.detail[linkName]['time'] + duration;
+    timePerJob.detail[linkName]['notes'] = timePerJob.detail[linkName]['notes'] + notes;
   });
 
   return timePerJob;
