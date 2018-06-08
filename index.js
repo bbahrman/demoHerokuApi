@@ -29,8 +29,8 @@ function onGet (req, res) {
   const request = require('request');
   console.log('Calling request');
   request(options, function (error, response, body) {
-    console.log('Response returned from remote, returning response object')
-    res.send(body);
+    console.log('Response returned from remote, processing response object');
+    res.send(body['results']['timesheets']);
   });
   console.log('End onGet');
 }
