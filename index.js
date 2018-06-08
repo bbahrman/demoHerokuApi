@@ -33,17 +33,34 @@ function onGet (req, res) {
     const bodyData = JSON.parse(body);
     const timePerJob = {};
     const timesheetData = bodyData['results']['timesheets'];
+    const jobCodeData = bodyData['supplemental_data']['jobcodes'];
+    const jobCodeDictionary = {};
 
     Object.keys(timesheetData).forEach((entryId) => {
       console.log(timesheetData[entryId]['duration']);
       timePerJob[timesheetData[entryId]['jobcode_id']] = timePerJob[timesheetData[entryId]['jobcode_id']] ? timePerJob[timesheetData[entryId]['jobcode_id']] + parseInt(timesheetData[entryId]['duration']) : parseInt(timesheetData[entryId]['duration']);
     });
 
-    Object.keys(timesheetData).forEach((entryId) => {
-      console.log(timesheetData[entryId]['duration']);
-      timePerJob[timesheetData[entryId]['jobcode_id']] = timePerJob[timesheetData[entryId]['jobcode_id']] ? timePerJob[timesheetData[entryId]['jobcode_id']] + parseInt(timesheetData[entryId]['duration']) : parseInt(timesheetData[entryId]['duration']);
+    const parentIdToName = {};
+    Object.keys(jobCodeData).forEach(jobId => {
+      if(jobCodeData[jobId]['has_children']) {
+        parentIdToName[jobId] = jobCodeData[jobId]['name'];
+      }
     });
-    res.send(bodyData);
+
+    Object.keys(jobCodeData).forEach(jobId => {
+      if(!jobCodeData[jobId]['has_children'] && jobCodeData[jobId]['parent_id'] !== 0) {
+        jobCodeDictionary[jobId] = parentIdToName[jobCodeData[jobId]['parent_id']];
+      } else {
+        jobCodeDictionary[jobId] = jobCodeData[jobId]['name'];
+      }
+    });
+    const finalData = {};
+    Object.keys(timePerJob).forEach(jobId => {
+      finalData[jobCodeDictionary[jobId]] = timePerJob[jobId];
+    });
+
+    res.send(finalData);
   });
   console.log('End onGet');
 }
