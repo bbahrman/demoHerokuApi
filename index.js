@@ -31,7 +31,11 @@ function onGet (req, res) {
   request(options, function (error, response, body) {
     console.log('Response returned from remote, processing response object');
     const bodyData = JSON.parse(body);
-    res.send(bodyData['results']['timesheets']);
+    const timePerJob = {};
+    Object.keys(bodyData).forEach((entryId) => {
+      timePerJob[bodyData[entryId]['jobcode_id']] += bodyData[entryId]['duration'];
+    });
+    res.send(timePerJob);
   });
   console.log('End onGet');
 }
