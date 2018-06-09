@@ -19,8 +19,9 @@ function onGet (req, res) {
   console.log('Entering onGet, req = ');
   console.log(req.query);
   const today = new Date().toISOString().split('T');
+  const targetDate = req.query['date'] ? req.query['date'] : today[0];
   const options = {
-    url: 'https://rest.tsheets.com/api/v1/timesheets?on_the_clock=both&start_date=' + today[0],
+    url: 'https://rest.tsheets.com/api/v1/timesheets?on_the_clock=both&start_date=' + targetDate,
     headers: {
       'Authorization': 'Bearer S.4__ae3083c841d0d9c1850c5186cc64aba675671ae2'
     }
