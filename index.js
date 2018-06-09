@@ -16,9 +16,9 @@ app
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 function onGet (req, res) {
-  console.log('Entering onGet');
-  //const today = new Date().toISOString().split('T');
-  const today = ['2018-06-08']
+  console.log('Entering onGet, req = ');
+  console.log(req);
+  const today = new Date().toISOString().split('T');
   const options = {
     url: 'https://rest.tsheets.com/api/v1/timesheets?on_the_clock=both&start_date=' + today[0],
     headers: {
