@@ -53,11 +53,13 @@ getWeekStart(targetDate);
 }
 
 function getWeekStart(target) {
+  console.log('Entering getWeekStart');
   if(target !== typeof Date) {
     target = new Date(target);
   }
   const adjustedDayNum = target.getDay() === 0 ? 7 : target.getDay();
-  console.log('getWeekStart, adjustedDayNum = ' + adjustedDayNum + ' date beginning of week = ' + target - (adjustedDayNum - 1));
+  console.log('getWeekStart, adjustedDayNum = ' + adjustedDayNum)
+  console.log('date beginning of week = ' + target - (adjustedDayNum - 1) * 24 * 60 * 60 *1000);
   return target - (adjustedDayNum - 1);
 }
 function onPost(req, res) {
