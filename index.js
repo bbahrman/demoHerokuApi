@@ -60,8 +60,8 @@ function processData(timesheetData, jobDictionary) {
     const nonBillable = timesheetData[date]['summary']['Non-billable'] ? timesheetData[date]['summary']['Non-billable'] : 0;
     const billable = timesheetData[date]['summary']['Billable'] ? timesheetData[date]['summary']['Billable'] : 0;
     timesheetData[date]['summary']['workHours'] = nonBillable + billable;
-    timesheetData[date]['summary']['trackingUtilization'] = billable / Math.min(nonBillable + billable, 8) * 100;
-    timesheetData[date]['summary']['dailyUtilization'] = billable / 8 * 100;
+    timesheetData[date]['summary']['trackingUtilization'] = Math.round(billable / Math.min(nonBillable + billable, 8) * 100);
+    timesheetData[date]['summary']['dailyUtilization'] = Math.round(billable / 8 * 100);
 
     Object.keys(timesheetData[date]['detail']).forEach(jobId => {
       timesheetData[date]['detail'][jobId]['time'] = Math.round((timesheetData[date]['detail'][jobId]['time'] / (60*60)) * 100) / 100;
