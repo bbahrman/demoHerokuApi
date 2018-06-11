@@ -62,7 +62,7 @@ function processData(timesheetData, jobDictionary) {
       timesheetData[date]['detail'][jobId]['time'] = Math.round((timesheetData[date]['detail'][jobId]['time'] / (60*60)) * 100) / 100;
     });
   });
-  
+
   return timesheetData;
 }
 
