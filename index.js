@@ -22,10 +22,10 @@ function onGet (req, res) {
   const targetDate = req.query['date'] ? req.query['date'] : today[0];
   const startWeek = getWeekStart(targetDate);
   const startString = startWeek.toISOString().split('T');
-  startWeek.setDate(startWeek.getDate() + 7);
+  startWeek.setDate(startWeek.getDate() + 6);
   const endString = startWeek.toISOString().split('T');
   const urlString = 'https://rest.tsheets.com/api/v1/timesheets?on_the_clock=both&start_date=' + startString[0] + '&end_date=' + endString[0];
-  console.log('Calling URL: ' + urlString)
+  console.log('Calling URL: ' + urlString);
   const options = {
     url: urlString,
     headers: {
