@@ -21,9 +21,11 @@ function onGet (req, res) {
   const today = new Date().toISOString().split('T');
   const targetDate = req.query['date'] ? req.query['date'] : today[0];
   const startWeek = getWeekStart(targetDate);
-  console.log(startWeek.toISOString());
+  const startString = startWeek.toISOString().split('T');
+  startWeek.setDate(startWeek.getDate() + 7);
+  const endString = startWeek.toISOString().split('T');
   const options = {
-    url: 'https://rest.tsheets.com/api/v1/timesheets?on_the_clock=both&start_date=' + targetDate,
+    url: 'https://rest.tsheets.com/api/v1/timesheets?on_the_clock=both&start_date=' + startString[0] + '&end_date=' + endString[0],
     headers: {
       'Authorization': 'Bearer S.4__ae3083c841d0d9c1850c5186cc64aba675671ae2'
     }
@@ -57,7 +59,6 @@ function getWeekStart(target) {
   console.log('Entering getWeekStart');
   if(target !== typeof Date) {
     target = new Date(target);
-    console.log('Changing to date object = ' + target.toISOString());
   }
   const adjustedDayNum = target.getDay() === 0 ? 7 : target.getDay();
   target.setDate(target.getDate() - (adjustedDayNum - 1));
