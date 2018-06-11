@@ -21,7 +21,7 @@ function onGet (req, res) {
   const today = new Date().toISOString().split('T');
   const targetDate = req.query['date'] ? req.query['date'] : today[0];
   const startWeek = getWeekStart(targetDate);
-  console.log(startWeek.getDate());
+  console.log(startWeek.toISOString());
   const options = {
     url: 'https://rest.tsheets.com/api/v1/timesheets?on_the_clock=both&start_date=' + targetDate,
     headers: {
