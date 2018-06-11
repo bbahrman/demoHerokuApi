@@ -57,6 +57,7 @@ function getWeekStart(target) {
   console.log('Entering getWeekStart');
   if(target !== typeof Date) {
     target = new Date(target);
+    console.log('Changing to date object');
   }
   const adjustedDayNum = target.getDay() === 0 ? 7 : target.getDay();
   return target.setDate(target.getDate() - (adjustedDayNum - 1));
