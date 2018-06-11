@@ -24,8 +24,9 @@ function onGet (req, res) {
   const startString = startWeek.toISOString().split('T');
   startWeek.setDate(startWeek.getDate() + 7);
   const endString = startWeek.toISOString().split('T');
+  const urlString = 'https://rest.tsheets.com/api/v1/timesheets?on_the_clock=both&start_date=' + startString[0] + '&end_date=' + endString[0];
   const options = {
-    url: 'https://rest.tsheets.com/api/v1/timesheets?on_the_clock=both&start_date=' + startString[0] + '&end_date=' + endString[0],
+    url: urlString,
     headers: {
       'Authorization': 'Bearer S.4__ae3083c841d0d9c1850c5186cc64aba675671ae2'
     }
