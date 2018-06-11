@@ -16,8 +16,6 @@ app
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 function onGet (req, res) {
-  console.log('Entering onGet, req = ');
-  console.log(req.query);
   const today = new Date().toISOString().split('T');
   const targetDate = req.query['date'] ? req.query['date'] : today[0];
   const startWeek = getWeekStart(targetDate);
@@ -32,33 +30,43 @@ function onGet (req, res) {
       'Authorization': 'Bearer S.4__ae3083c841d0d9c1850c5186cc64aba675671ae2'
     }
   };
-  console.log('Setting header');
   res.header('Content-Type', 'application/json');
-  console.log('Define request');
   const request = require('request');
-  console.log('Calling request');
   request(options, function (error, response, body) {
-    console.log('Response returned from remote, processing response object');
     // return a mapping of job ids to either the parent name or the job's name (both in object)
-    const jobDictionary = makeDictionary(body);
-    // get
-    const timePerJob = summarizeTimePerJob(body, jobDictionary);
+    const bodyData = JSON.parse(body);
+    const jobDictionary = makeDictionary(bodyData);
+    const timesheetData = bodyData['results']['timesheets'];
 
-    Object.keys(timePerJob['summary']).forEach(jobId => {
-      timePerJob['summary'][jobId] = Math.round((timePerJob['summary'][jobId] / (60*60)) * 100) / 100;
+    const dateSortedTimeEntries = {};
+    Object.keys(timesheetData).forEach(entryId => {
+      if(!dateSortedTimeEntries[timesheetData[entryId]['date']]) {
+        dateSortedTimeEntries[timesheetData[entryId]['date']] = [];
+      }
+      dateSortedTimeEntries[timesheetData[entryId]['date']].push(timesheetData[entryId]);
     });
 
-    Object.keys(timePerJob['detail']).forEach(jobId => {
-      timePerJob['detail'][jobId]['time'] = Math.round((timePerJob['detail'][jobId]['time'] / (60*60)) * 100) / 100;
-    });
-
-    res.send(timePerJob);
+    res.send(processData(dateSortedTimeEntries, jobDictionary));
   });
-  console.log('End onGet');
+}
+
+function processData(timesheetData, jobDictionary) {
+  Object.keys(timesheetData).forEach((date) => {
+    timesheetData[date] = summarizeTimePerJob(timesheetData[date], jobDictionary);
+
+    Object.keys(timesheetData[date]['summary']).forEach(jobId => {
+      timesheetData[date]['summary'][jobId] = Math.round((timesheetData[date]['summary'][jobId] / (60*60)) * 100) / 100;
+    });
+
+    Object.keys(timesheetData[date]['detail']).forEach(jobId => {
+      timesheetData[date]['detail'][jobId]['time'] = Math.round((timesheetData[date]['detail'][jobId]['time'] / (60*60)) * 100) / 100;
+    });
+  });
+  
+  return timesheetData;
 }
 
 function getWeekStart(target) {
-  console.log('Entering getWeekStart');
   if(target !== typeof Date) {
     target = new Date(target);
   }
@@ -72,28 +80,25 @@ function onPost(req, res) {
     res.send('Hello World - POST');
 }
 
-function summarizeTimePerJob (responseBody, mapping) {
-  const bodyData = JSON.parse(responseBody);
-  const timesheetData = bodyData['results']['timesheets'];
+function summarizeTimePerJob (timesheetData, mapping) {
   const now = new Date();
   const timePerJob = {
     summary: {},
     detail: {}
   };
 
-  Object.keys(timesheetData).forEach((entryId) => {
+  timesheetData.forEach((entryObject) => {
     let duration;
-    const entryObject = timesheetData[entryId];
     let notes = entryObject['notes'] ? ' ' + entryObject['notes'] : entryObject['notes'];
     const jobId = entryObject['jobcode_id'];
     const parent = mapping['idToParentName'][jobId];
     const linkName = mapping['idToLink'][jobId];
 
-    if(timesheetData[entryId]['on_the_clock']) {
-      duration = (now - Date.parse(timesheetData[entryId]['start'])) / 1000;
+    if(entryObject['on_the_clock']) {
+      duration = (now - Date.parse(entryObject['start'])) / 1000;
       console.log('Duration calculation, seconds = ' + duration);
     } else {
-      duration = parseInt(timesheetData[entryId]['duration']);
+      duration = parseInt(entryObject['duration']);
     }
 
     // add to parent duration to parent
@@ -112,8 +117,7 @@ function summarizeTimePerJob (responseBody, mapping) {
   return timePerJob;
 }
 
-function makeDictionary (responseBody) {
-  const bodyData = JSON.parse(responseBody);
+function makeDictionary (bodyData) {
   const jobCodeData = bodyData['supplemental_data']['jobcodes'];
   const parentIdToName = {};
   const jobIdToLink = {};
