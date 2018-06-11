@@ -20,7 +20,7 @@ function onGet (req, res) {
   console.log(req.query);
   const today = new Date().toISOString().split('T');
   const targetDate = req.query['date'] ? req.query['date'] : today[0];
-getWeekStart(targetDate);
+  console.log(getWeekStart(targetDate));
   const options = {
     url: 'https://rest.tsheets.com/api/v1/timesheets?on_the_clock=both&start_date=' + targetDate,
     headers: {
@@ -58,10 +58,9 @@ function getWeekStart(target) {
     target = new Date(target);
   }
   const adjustedDayNum = target.getDay() === 0 ? 7 : target.getDay();
-  console.log('getWeekStart, adjustedDayNum = ' + adjustedDayNum);
-  console.log('date beginning of week = ' + target - (adjustedDayNum - 1) * 24 * 60 * 60 *1000);
   return target.setDate(target.getDate() - (adjustedDayNum - 1));
 }
+
 function onPost(req, res) {
     console.log(req.body);
     res.send('Hello World - POST');
