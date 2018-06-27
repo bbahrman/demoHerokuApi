@@ -25,7 +25,7 @@ request(options, function (error, response, body) {
       });
 
       const finalData = processData(dateSortedTimeEntries, jobDictionary);
-      request.post('http://postb.in/R7rCvcSM', finalData);
+      request.post('http://postb.in/R7rCvcSM', {finalData: finalData});
 });
 
 
