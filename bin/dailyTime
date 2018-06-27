@@ -25,7 +25,9 @@ request(options, function (error, response, body) {
       });
 
       const finalData = processData(dateSortedTimeEntries, jobDictionary);
-      request.post({url:'http://postb.in/RYEY6xSZ', formData: finalData});
+      request.post({url:'http://postb.in/RYEY6xSZ', formData: finalData}, (err, httpResponse, body) => {
+        console.log(httpResponse);
+      });
 });
 
 
