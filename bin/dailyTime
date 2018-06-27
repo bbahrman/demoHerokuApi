@@ -25,8 +25,14 @@ request(options, function (error, response, body) {
       });
 
       const finalData = processData(dateSortedTimeEntries, jobDictionary);
-      request.post({url:'http://postb.in/RYEY6xSZ', formData: finalData}, (err, httpResponse, body) => {
-        console.log(httpResponse);
+      const finalDataString = JSON.stringify(finalData);
+      console.log('Final Data string = ' + finalDataString);
+      request.post({
+        'headers': {'Content-Type': 'application/json'},
+        url:'http://postb.in/RYEY6xSZ',
+        body: finalDataString
+      }, (err, httpResponse, body) => {
+        
       });
 });
 
