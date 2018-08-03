@@ -13,7 +13,6 @@ const request = require('request');
 request(options, function (error, response, body) {
       // return a mapping of job ids to either the parent name or the job's name (both in object)
       const bodyData = JSON.parse(body);
-      console.log(bodyData);
       const jobDictionary = makeDictionary(bodyData);
       const timesheetData = bodyData['results']['timesheets'];
 
