@@ -29,7 +29,7 @@ request(options, function (error, response, body) {
       console.log('Final Data string = ' + finalDataString);
       request.post({
         'headers': {'Content-Type': 'application/json'},
-        url:'http://postb.in/RYEY6xSZ',
+        url:'https://cryptic-citadel-45441.herokuapp.com/',
         body: finalDataString
       }, (err, httpResponse, body) => {
         
