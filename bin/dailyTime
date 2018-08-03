@@ -6,7 +6,7 @@ console.log('Calling URL: ' + urlString);
 const options = {
   url: urlString,
   headers: {
-    'Authorization': 'Bearer S.4__f1a74b3f456b2d9376923549ef4a77279d9c7c6c'
+    'Authorization': process.env.TS_SHEETS_AUTH_TOKEN
   }
 };
 const request = require('request');
