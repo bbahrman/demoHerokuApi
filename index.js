@@ -29,7 +29,7 @@ function onGet (req, res) {
     const options = {
       url: urlString,
       headers: {
-        'Authorization': 'Bearer S.4__ae3083c841d0d9c1850c5186cc64aba675671ae2'
+        'Authorization': 'Bearer S.4__f1a74b3f456b2d9376923549ef4a77279d9c7c6c'
       }
     };
     res.header('Content-Type', 'application/json');
